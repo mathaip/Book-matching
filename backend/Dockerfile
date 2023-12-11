@@ -19,4 +19,4 @@ EXPOSE 8080
 COPY main.py .
 
 # Set the command to run the Flask ap
-CMD ["streamlit", "run", "main.py", "--server.port=8080","server.address=0.0.0.0"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

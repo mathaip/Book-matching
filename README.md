@@ -24,6 +24,7 @@ The system allows users to input their preferences through a form, and the backe
 
 1. Navigate to the `frontend/` directory.
 2. Install dependencies: `npm install`
+3. Change line 70 in app.jsx to const url = "http://localhost:8080/match"
 3. Start the development server: `npm start`
 4. Open your browser and go to [http://localhost:3000](http://localhost:3000)
 
@@ -32,7 +33,7 @@ The system allows users to input their preferences through a form, and the backe
 1. Navigate to the `backend/` directory.
 2. Install dependencies: `pip install -r requirements.txt`
 3. Run the FastAPI server: `uvicorn main:app --reload`
-4. The backend will be available at [http://localhost:8080](http://localhost:8000)
+4. The backend will be available at [http://localhost:8080](http://localhost:8080)
 
 ## How the Matching Works
 
@@ -44,3 +45,4 @@ The backend uses a simple matching algorithm based on the user's preferences and
 2. Calculate scores for each book based on genre, reading level, and user input vectors.
 3. Identify the book with the minimum score as the closest match.
 4. Return the matched book information.
+5. if you want to see the matching vector scores you can view in the console logs

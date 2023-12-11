@@ -9,7 +9,7 @@ app = FastAPI()
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost", "http://localhost:3000"],  # Add your localhost URL(s)
+    allow_origins=["http://localhost", "http://localhost:3000","https://book-matching-dot-fluency-403011.uc.r.appspot.com"],  # Add your localhost URL(s)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,7 +1,7 @@
 // App.js
 
-import React, { useState } from 'react';
-import { AppBar,Button, Toolbar, Typography, Container, Grid, Select, MenuItem, Card, CardMedia, CardContent, Box } from '@mui/material';
+import React, { useState, useEffect} from 'react';
+import { AppBar,Button, Toolbar, Typography, Container, Grid, Select,Skeleton, MenuItem, Card, CardMedia, CardContent, Box } from '@mui/material';
 import dragonTattoo from './assets/images/dragon_tattoo.jpeg'
 import  book_thief from './assets/images/book_thief.jpg'
 import da_vinci_codi from './assets/images/da_vinci_code.webp'
@@ -32,10 +32,12 @@ function App() {
   const [response, setResponse] = useState()
   const [bookName, setBookName] = useState()
   const [bookGenre, setBookGenre] = useState('')
-  const [bookImage, setBookImage] =useState()
+  const [bookImage, setBookImage] = useState(null)
   const [bookReadingLevel, setBookReadingLevel]=useState('')
   const [bookVector, setBookVector] = useState()
   const [userVector, setUserVector] = useState()
+  const [loading, setLoading] = useState(false);
+
   // Placeholder data for book
   const bookImageMapping = {
     "The Girl with the Dragon Tattoo": dragonTattoo,
@@ -55,10 +57,17 @@ function App() {
     "Pride and Prejudice": pride,
 };
 
+useEffect(() => {
+    // This useEffect will run whenever bookName is updated
+    if (bookName) {
+      setBookImage(bookImageMapping[bookName]);
+    }
+  }, [bookName]);
+
   const bookMatchAPI =async()=>{
     try {
-
-      const url = 'http://127.0.0.1:8080/match';
+      setLoading(true)
+      const url = 'https://book-matching-gn6qwjqynq-ue.a.run.app/match';
 
       const requestBody = {
         method: 'POST', // specify the HTTP method
@@ -78,18 +87,17 @@ function App() {
       const data = await response.json();
       
       const result = data.result
+      console.log(result)
       setBookName(result.matched_book_title)
-      console.log(bookName)
       setBookGenre(result.matched_book_genre)
       setBookReadingLevel(result.matched_book_reading_level)
       setUserVector(result.user_input_vector_score)
       setBookVector(result.matched_book_vector_score)
-      const matchedBookImageUrl = bookImageMapping[bookName];
-      console.log(matchedBookImageUrl);
-      setBookImage(matchedBookImageUrl)
 // Now you can use matchedBookImageUrl to display the image on your frontend
     } catch (error) {
       console.error('Error fetching data:', error);
+    }finally {
+      setLoading(false);
     }
   };
  
@@ -139,19 +147,25 @@ function App() {
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="fitContent"
-                image={bookImage}
-                alt={bookName}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {bookName} -- {bookGenre} -- {bookReadingLevel}
-                </Typography>
-              </CardContent>
-            </Card>
+            {loading ? (
+              // Skeleton while loading
+              <Skeleton variant="rectangular" height={300} />
+            ) : bookName ? (
+              // Card component when bookName exists
+              <Card>
+                <CardMedia
+                  component="img"
+                  height="fitContent"
+                  image={bookImage}
+                  alt={bookName}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {bookName} -- {bookGenre} -- {bookReadingLevel}
+                  </Typography>
+                </CardContent>
+              </Card>
+            ) : null}
           </Grid>
         </Grid>
       </Container>
